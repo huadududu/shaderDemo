@@ -36,6 +36,7 @@ export default class EffectManager extends cc.Component {
     // 初始化
     onLoad() {
         // cc.director.setDisplayStats(true);
+        cc.dynamicAtlasManager.enabled = false;
         this.resolution.x = (this.node.getContentSize().width);
         this.resolution.y = (this.node.getContentSize().height);
         let self = this;

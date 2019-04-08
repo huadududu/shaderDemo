@@ -86,7 +86,7 @@ export default class FluxayEffect extends cc.Component {
         }
         if (this._material) {
             this.time = (Date.now() - this.startTime) / 1000;
-            this._material.setTime(this.time);
+            this._material.setTime(Math.sin(this.time).toFixed(1));
         }
     }
 }
