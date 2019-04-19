@@ -50,8 +50,10 @@ export default class EffectManager extends cc.Component {
                 let name = self.fragShader;
                 // this.useShader();
                 self._material = ShaderUtil.setShader(self.node.getComponent(cc.Sprite), {vert, frag, name});
+                self._material.setResolution(self.resolution.x, self.resolution.y);
             }
-        });
+    });
+
         // let vert = CirclePortrait.circle_vert;
         // let frag = CirclePortrait.cicle1_targ;
         // let name = "circleportrait";

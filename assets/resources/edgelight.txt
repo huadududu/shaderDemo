@@ -1,36 +1,41 @@
-/*
-  myshader.frag
-  MyCppGame
-  Created by guanghui on 4/8/14.
-http://www.idevgames.com/forums/thread-3010.html
-*/
 
-varying vec4 v_fragmentColor;
-
+varying vec2 v_texCoord;
+uniform vec2 resolution;
 uniform sampler2D texture;
 uniform float time;
-varying vec2 v_texCoord;
+const float radius = 10.0;
+const vec3 glowColor =vec3(1.0, 1.0, 0.0);
+float coefficient()
+{
+	float v = mod(time, 3.0);
+    if(v > 1.5)
+        v = 3.0 - v;
+    return v;
+}
+void mainImage( out vec4 fragColor, in vec2 fragCoord ){
+    vec2 uv = fragCoord.xy / resolution.xy;
+    vec2 unit = 1.0 / resolution.xy;
+    vec4 texel = texture2D(texture,vec2(v_texCoord.xy));
+    vec4 finalColor = vec4(0.0);
+    float density =0.0;
+    if(texel.a > 1.0){
+       finalColor = vec4(texel.rgb,1);
+    }
+    else{
+        for(int i = 0; i < int(radius); ++i){
+            density += texture2D(texture, vec2(uv.x + unit.x * float(i), uv.y + unit.y * float(i))).a;
+            density += texture2D(texture, vec2(uv.x - unit.x * float(i), uv.y + unit.y * float(i))).a;
+            density += texture2D(texture, vec2(uv.x - unit.x * float(i), uv.y - unit.y * float(i))).a;
+            density += texture2D(texture, vec2(uv.x + unit.x * float(i), uv.y - unit.y * float(i))).a;
+        }
+        finalColor = vec4(texel.rgb * texel.a, texel.a);
 
+        //finalColor = coefficient() *density *vec4(glowColor * density / radius , 1.0);
+
+    }
+	fragColor = finalColor;
+}
 void main()
 {
-    float radius = 0.01;
-    vec4 accum = vec4(0.0);
-    vec4 normal = vec4(0.0);
-
-    normal = texture2D(texture, vec2(v_texCoord.x, v_texCoord.y));
-
-    accum += texture2D(texture, vec2(v_texCoord.x - radius, v_texCoord.y-radius));
-    accum += texture2D(texture, vec2(v_texCoord.x + radius, v_texCoord.y-radius));
-    accum += texture2D(texture, vec2(v_texCoord.x + radius, v_texCoord.y+radius));
-    accum += texture2D(texture, vec2(v_texCoord.x - radius, v_texCoord.y+radius));
-
-    accum *= 1.75;
-
-    accum.r = 1.0;
-    accum.g = 1.0;
-    accum.b = 0.0;
-
-    normal = (accum * (1.0 - normal.a)) + (normal * normal.a);
-
-    gl_FragColor = v_fragmentColor * normal;
+    mainImage(gl_FragColor, gl_FragCoord.xy);
 }
