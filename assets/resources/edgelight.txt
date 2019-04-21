@@ -3,39 +3,29 @@ varying vec2 v_texCoord;
 uniform vec2 resolution;
 uniform sampler2D texture;
 uniform float time;
-const float radius = 10.0;
-const vec3 glowColor =vec3(1.0, 1.0, 0.0);
-float coefficient()
-{
-	float v = mod(time, 3.0);
-    if(v > 1.5)
-        v = 3.0 - v;
-    return v;
-}
-void mainImage( out vec4 fragColor, in vec2 fragCoord ){
-    vec2 uv = fragCoord.xy / resolution.xy;
-    vec2 unit = 1.0 / resolution.xy;
-    vec4 texel = texture2D(texture,vec2(v_texCoord.xy));
-    vec4 finalColor = vec4(0.0);
-    float density =0.0;
-    if(texel.a > 1.0){
-       finalColor = vec4(texel.rgb,1);
-    }
-    else{
-        for(int i = 0; i < int(radius); ++i){
-            density += texture2D(texture, vec2(uv.x + unit.x * float(i), uv.y + unit.y * float(i))).a;
-            density += texture2D(texture, vec2(uv.x - unit.x * float(i), uv.y + unit.y * float(i))).a;
-            density += texture2D(texture, vec2(uv.x - unit.x * float(i), uv.y - unit.y * float(i))).a;
-            density += texture2D(texture, vec2(uv.x + unit.x * float(i), uv.y - unit.y * float(i))).a;
+const float len = 10.0;
+
+const vec4 glowColor =vec4(1.0, 1.0, 0.0,1.0);
+ void main () {
+            vec4 uv_color = texture2D(texture, v_texCoord);
+            if(uv_color.a == 0.0){
+                float chang = len/5.0;
+                float num = 0.0;
+                for(float x = -5.0 ; x <= 5.0 ; x++){
+                    for(float y = -5.0 ; y <= 5.0 ; y++){
+                        float posx = v_texCoord.x+x/resolution.x*chang;
+                        float posy = v_texCoord.y+y/resolution.x*chang;
+                        vec2 uv2 = vec2(posx,posy);
+                        vec4 uv2_color = texture2D(texture,uv2);
+                        if(uv2_color.a > 0.0){
+                            num = num+1.0;
+                        }
+                    }
+                }
+                if(num > 0.0){
+                    uv_color = glowColor;
+                    uv_color.a = num/50.0*time;
+                }
+            }
+            gl_FragColor =uv_color;
         }
-        finalColor = vec4(texel.rgb * texel.a, texel.a);
-
-        //finalColor = coefficient() *density *vec4(glowColor * density / radius , 1.0);
-
-    }
-	fragColor = finalColor;
-}
-void main()
-{
-    mainImage(gl_FragColor, gl_FragCoord.xy);
-}
