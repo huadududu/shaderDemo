@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.296875,
-      "y": 0.296875,
+      "x": 0.275,
+      "y": 0.275,
       "z": 1
     },
     "_quat": {
@@ -415,7 +415,7 @@
       "__id__": 8
     },
     "_enabled": true,
-    "fragShader": "glowing",
+    "fragShader": "glowcircle",
     "_id": "07rvCsvW5JpKlGSbC96lsQ"
   },
   {

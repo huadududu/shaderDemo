@@ -20,7 +20,6 @@ int getIsStrokeWithAngel(float angel)
     return stroke;
 }
 void main()
-void main()
 {
     vec4 myC = texture2D(texture, v_texCoord); // 正在处理的这个像素点的颜色
     if (myC.a >= 0.5) // 不透明，不管，直接返回
@@ -30,21 +29,24 @@ void main()
     }
     // 这里肯定有朋友会问，一个for循环就搞定啦，怎么这么麻烦！其实我一开始也是用for的，但后来在安卓某些机型（如小米4）会直接崩溃，查找资料发现OpenGL es并不是很支持循环，while和for都不要用
     int strokeCount = 0;
-    strokeCount += getIsStrokeWithAngel(0.0);
-    strokeCount += getIsStrokeWithAngel(30.0);
-    strokeCount += getIsStrokeWithAngel(60.0);
-    strokeCount += getIsStrokeWithAngel(90.0);
-    strokeCount += getIsStrokeWithAngel(120.0);
-    strokeCount += getIsStrokeWithAngel(150.0);
-    strokeCount += getIsStrokeWithAngel(180.0);
-    strokeCount += getIsStrokeWithAngel(210.0);
-    strokeCount += getIsStrokeWithAngel(240.0);
-    strokeCount += getIsStrokeWithAngel(270.0);
-    strokeCount += getIsStrokeWithAngel(300.0);
-    strokeCount += getIsStrokeWithAngel(330.0);
+    //strokeCount += getIsStrokeWithAngel(0.0);
+    //strokeCount += getIsStrokeWithAngel(30.0);
+    //strokeCount += getIsStrokeWithAngel(60.0);
+    //strokeCount += getIsStrokeWithAngel(90.0);
+    //strokeCount += getIsStrokeWithAngel(120.0);
+    //strokeCount += getIsStrokeWithAngel(150.0);
+    //strokeCount += getIsStrokeWithAngel(180.0);
+    //strokeCount += getIsStrokeWithAngel(210.0);
+    //strokeCount += getIsStrokeWithAngel(240.0);
+    //strokeCount += getIsStrokeWithAngel(270.0);
+    //strokeCount += getIsStrokeWithAngel(300.0);
+    //strokeCount += getIsStrokeWithAngel(330.0);
+    for(float i = 0.0; i<12.0;i+=1.0){
+     strokeCount += getIsStrokeWithAngel(i*30.0);
+    }
     if (strokeCount > 0) // 四周围至少有一个点是不透明的，这个点要设成描边颜色
     {
-        myC.rgb = vec3(1.0,0.1,0.);
+        myC.rgb = vec3(1.0,1.0,0.);
         myC.a = 1.0;
     }
     gl_FragColor = v_fragmentColor * myC;
