@@ -433,7 +433,7 @@
       "__id__": 8
     },
     "_enabled": true,
-    "fragShader": "glowbloom",
+    "fragShader": "edgelight",
     "_id": "d0qn226mpDNoO9qMIftsmt"
   },
   {

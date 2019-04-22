@@ -7,6 +7,11 @@ const float len = 10.0;
 
 const vec4 glowColor =vec4(1.0, 1.0, 0.0,1.0);
  void main () {
+
+ float tm = sin(time);
+ if(tm<0.0){
+ tm *=-1.0;
+ }
             vec4 uv_color = texture2D(texture, v_texCoord);
             if(uv_color.a == 0.0){
                 float chang = len/5.0;
@@ -24,7 +29,7 @@ const vec4 glowColor =vec4(1.0, 1.0, 0.0,1.0);
                 }
                 if(num > 0.0){
                     uv_color = glowColor;
-                    uv_color.a = num/50.0*time;
+                    uv_color.a = num/50.0*tm;
                 }
             }
             gl_FragColor =uv_color;
